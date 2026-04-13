@@ -325,18 +325,29 @@
     evts.sort((a, b) => (a.date || '').localeCompare(b.date || ''));
     evts.forEach(e => {
       const item = document.createElement('div');
-      item.className = 'event-item';
+      item.className = 'event-item ' + (e.important ? 'pink' : 'blue');
       const dot = document.createElement('div');
       dot.className = 'event-dot ' + (e.important ? 'dot-important' : 'dot-normal');
       const name = document.createElement('span');
       name.className = 'event-name';
       name.textContent = e.name;
+      const right = document.createElement('div');
+      right.style.cssText = 'display:flex;align-items:center;gap:6px;flex-shrink:0';
+      if (e.type) {
+        const badge = document.createElement('span');
+        const bg = {'체험단':'#D6EEFF','협찬':'#FFE0EC','RT이벤트':'#E4F5DC','기타':'#F0F0F0'};
+        const tc = {'체험단':'#2A6FA5','협찬':'#B04060','RT이벤트':'#3A7A30','기타':'#888'};
+        badge.style.cssText = `font-size:9px;padding:2px 7px;border-radius:20px;background:${bg[e.type]||'#F0F0F0'};color:${tc[e.type]||'#888'};font-weight:700;white-space:nowrap`;
+        badge.textContent = e.type;
+        right.appendChild(badge);
+      }
       const date = document.createElement('span');
       date.className = 'event-date';
       if (e.date) date.textContent = e.date.substring(5, 10).replace('-', '/');
+      right.appendChild(date);
       item.appendChild(dot);
       item.appendChild(name);
-      item.appendChild(date);
+      item.appendChild(right);
       list.appendChild(item);
     });
   }
